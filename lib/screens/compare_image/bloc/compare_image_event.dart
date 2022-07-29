@@ -2,7 +2,10 @@ part of 'compare_image_bloc.dart';
 
 /// CompareImageEvent.
 @immutable
-abstract class CompareImageEvent {}
+abstract class CompareImageEvent {
+  /// CompareImageEvent constructor.
+  const CompareImageEvent();
+}
 
 /// Photo click events.
 class CompareCardTappedEvent extends CompareImageEvent {
@@ -10,11 +13,11 @@ class CompareCardTappedEvent extends CompareImageEvent {
   final int indexOfCards;
 
   /// Constructor for CompareImageTappedEvent.
-  CompareCardTappedEvent(this.indexOfCards);
+  const CompareCardTappedEvent(this.indexOfCards);
 }
 
 /// Button click events.
 class CompareCardComparedEvent extends CompareImageEvent {
   /// Constructor for CompareCardComparedEvent.
-  CompareCardComparedEvent();
+  const CompareCardComparedEvent();
 }

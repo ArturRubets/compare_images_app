@@ -51,7 +51,9 @@ class _CompareImagePageState extends State<CompareImagePage> {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context
+                  .read<CompareImageBloc>()
+                  .add(const CompareCardComparedEvent()),
               child: const Text('Compare'),
             )
           ],
