@@ -22,7 +22,16 @@ class CompareImageBloc extends Bloc<CompareImageEvent, CompareImageState> {
     CompareCardTappedEvent event,
     Emitter<CompareImageState> emit,
   ) {
-    emit(state.copyWith(resultOfCompare: ResultOfCompare.initial));
+    if (state.resultOfCompare != ResultOfCompare.initial) {
+      final listOfCards = List<CardItem>.from(state.listOfCards);
+      emit(
+        state.copyWith(
+          resultOfCompare: ResultOfCompare.initial,
+          listOfCards:
+              listOfCards.map((e) => e.copyWith(isTaped: false)).toList(),
+        ),
+      );
+    }
 
     final listOfCards = List<CardItem>.from(state.listOfCards);
     final index = event.indexOfCards;
