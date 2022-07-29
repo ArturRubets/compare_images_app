@@ -12,3 +12,9 @@ class CompareCardTappedEvent extends CompareImageEvent {
   /// Constructor for CompareImageTappedEvent.
   CompareCardTappedEvent(this.indexOfCards);
 }
+
+/// Button click events.
+class CompareCardComparedEvent extends CompareImageEvent {
+  /// Constructor for CompareCardComparedEvent.
+  CompareCardComparedEvent();
+}

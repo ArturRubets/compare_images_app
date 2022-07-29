@@ -39,7 +39,7 @@ class CardSelectable extends StatelessWidget {
                 opacity: card.isTaped ? CardSelectable.opacity : 1,
                 child: Image.asset(
                   card.asset,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               );
             },
