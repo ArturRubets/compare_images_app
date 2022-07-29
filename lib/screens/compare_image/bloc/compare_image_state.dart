@@ -5,6 +5,9 @@ class CompareImageState extends Equatable {
   /// List of cards
   final List<CardItem> listOfCards;
 
+  /// Number of compared pictures
+  static const int numberOfComparedPictures = 2;
+
   /// The list of properties that will be used to determine whether
   /// two instances are equal.
   @override

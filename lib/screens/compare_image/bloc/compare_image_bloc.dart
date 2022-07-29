@@ -24,6 +24,14 @@ class CompareImageBloc extends Bloc<CompareImageEvent, CompareImageState> {
 
     final isTaped = listOfCards[index].isTaped;
     listOfCards[index] = listOfCards[index].copyWith(isTaped: !isTaped);
-    emit(state.copyWith(listOfCards: listOfCards));
+
+    if (_quantitySelectedCards(listOfCards) <=
+        CompareImageState.numberOfComparedPictures) {
+      emit(state.copyWith(listOfCards: listOfCards));
+    }
   }
+
+  /// Quantity selected cards
+  int _quantitySelectedCards(List<CardItem> listOfCards) =>
+      listOfCards.where((element) => element.isTaped == true).length;
 }
