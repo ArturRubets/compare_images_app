@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       title: 'Compare images',
       theme: ThemeData(primarySwatch: Colors.deepOrange),
       debugShowCheckedModeBanner: false,
-      home: const CompareImagePage(title: 'Compare images'),
+      home: const CompareImagePage(title: 'Image compare'),
     );
   }
 }

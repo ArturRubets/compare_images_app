@@ -12,6 +12,19 @@ void main() {
     CardItem(asset: 'assets/images/car_bmw.jpg'),
     CardItem(asset: 'assets/images/car_rarity.jpg'),
     CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
+    CardItem(asset: 'assets/images/wild_seal.jpg'),
   ];
 
   runApp(

@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Image picker widget.
 class CardSelectable extends StatelessWidget {
   /// Image opacity.
-  static const opacity = 0.5;
+  static const opacity = 0.4;
 
   /// Card border radius.
   static const borderRadius = 10.0;

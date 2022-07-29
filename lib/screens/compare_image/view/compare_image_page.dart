@@ -6,13 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// HomePage.
 class CompareImagePage extends StatefulWidget {
   /// Max cross axis extent.
-  static const maxCrossAxisExtent = 400.0;
+  static const maxCrossAxisExtent = 200.0;
 
   /// Max cross axis extent.
   static const crossAxisSpacing = 8.0;
 
   /// Max cross axis extent.
   static const mainAxisSpacing = 8.0;
+
+  /// Bottom padding so that the button does not overlap the system bar.
+  static const bottomPaddingForButton = 10.0;
 
   /// Title this page.
   final String title;
@@ -37,7 +40,9 @@ class _CompareImagePageState extends State<CompareImagePage> {
       appBar: AppBar(title: Text(widget.title)),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: ListView(
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          fit: StackFit.expand,
           children: [
             GridView.extent(
               shrinkWrap: true,
@@ -49,13 +54,15 @@ class _CompareImagePageState extends State<CompareImagePage> {
                 (index) => CardSelectable(indexCard: index),
               ),
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => context
-                  .read<CompareImageBloc>()
-                  .add(const CompareCardComparedEvent()),
-              child: const Text('Compare'),
-            )
+            Positioned(
+              bottom: CompareImagePage.bottomPaddingForButton,
+              child: ElevatedButton(
+                onPressed: () => context
+                    .read<CompareImageBloc>()
+                    .add(const CompareCardComparedEvent()),
+                child: const Text('Compare'),
+              ),
+            ),
           ],
         ),
       ),
