@@ -16,32 +16,25 @@ class CompareImageBloc extends Bloc<CompareImageEvent, CompareImageState> {
       : super(CompareImageState(listOfCards: listOfCards)) {
     on<CompareCardTappedEvent>(_onTappedCard);
     on<CompareCardComparedEvent>(_onCompareCards);
+    on<CompareCardResetCardToInitialStateEvent>(
+      _onCompareCardResetCardToInitialStateEvent,
+    );
   }
 
   FutureOr<void> _onTappedCard(
     CompareCardTappedEvent event,
     Emitter<CompareImageState> emit,
-  ) {
-    if (state.resultOfCompare != ResultOfCompare.initial) {
-      final listOfCards = List<CardItem>.from(state.listOfCards);
-      emit(
-        state.copyWith(
-          resultOfCompare: ResultOfCompare.initial,
-          listOfCards:
-              listOfCards.map((e) => e.copyWith(isTaped: false)).toList(),
-        ),
-      );
-    }
+  ) async {
+    final newList = List<CardItem>.from(state.listOfCards);
+    final index = _indexCardInList(newList, event.cardItem);
+    if (index == null) return;
 
-    final listOfCards = List<CardItem>.from(state.listOfCards);
-    final index = event.indexOfCards;
+    final isTaped = newList[index].isTaped;
+    newList[index] = newList[index].copyWith(isTaped: !isTaped);
 
-    final isTaped = listOfCards[index].isTaped;
-    listOfCards[index] = listOfCards[index].copyWith(isTaped: !isTaped);
-
-    if (_selectedCards(listOfCards).length <=
+    if (_selectedCards(newList).length <=
         CompareImageState.numberOfComparedPictures) {
-      emit(state.copyWith(listOfCards: listOfCards));
+      emit(state.copyWith(listOfCards: newList));
     }
   }
 
@@ -49,10 +42,10 @@ class CompareImageBloc extends Bloc<CompareImageEvent, CompareImageState> {
     CompareCardComparedEvent _,
     Emitter<CompareImageState> emit,
   ) async {
-    if (!_isRequiredNumberOfPicturesSelected(state.listOfCards)) {
+    final selectedCards = _selectedCards(state.listOfCards);
+    if (!_isRequiredNumberOfPicturesSelected(selectedCards)) {
       return;
     }
-    final selectedCards = _selectedCards(state.listOfCards);
     for (var i = 1; i < selectedCards.length; i++) {
       final imagePath1 = selectedCards[i - 1].asset;
       final imagePath2 = selectedCards[i].asset;
@@ -60,23 +53,62 @@ class CompareImageBloc extends Bloc<CompareImageEvent, CompareImageState> {
       final imageBytes1 = await getImageBytes(imagePath1);
       final imageBytes2 = await getImageBytes(imagePath2);
 
-      final resultOfCompare = listEquals(imageBytes1, imageBytes2);
-      if (!resultOfCompare) {
-        emit(state.copyWith(resultOfCompare: ResultOfCompare.notEqual));
+      final isEqual = listEquals(imageBytes1, imageBytes2);
 
-        return;
+      if (isEqual) {
+        final card1 = selectedCards[i - 1]
+            .copyWith(resultOfCompare: ResultOfCompare.equal);
+        _updateStateCard(emit, state.listOfCards, card1);
+
+        final card2 =
+            selectedCards[i].copyWith(resultOfCompare: ResultOfCompare.equal);
+        _updateStateCard(emit, state.listOfCards, card2);
+      } else {
+        final card1 = selectedCards[i - 1]
+            .copyWith(resultOfCompare: ResultOfCompare.notEqual);
+        _updateStateCard(emit, state.listOfCards, card1);
+
+        final card2 = selectedCards[i]
+            .copyWith(resultOfCompare: ResultOfCompare.notEqual);
+        _updateStateCard(emit, state.listOfCards, card2);
       }
     }
-
-    emit(state.copyWith(resultOfCompare: ResultOfCompare.equal));
   }
 
-  bool _isRequiredNumberOfPicturesSelected(List<CardItem> listOfCards) {
-    return _selectedCards(listOfCards).length ==
-        CompareImageState.numberOfComparedPictures;
+  FutureOr<void> _onCompareCardResetCardToInitialStateEvent(
+    CompareCardResetCardToInitialStateEvent event,
+    Emitter<CompareImageState> emit,
+  ) {
+    _updateStateCard(
+      emit,
+      state.listOfCards,
+      event.cardItem.copyWith(
+        isTaped: false,
+        resultOfCompare: ResultOfCompare.initial,
+      ),
+    );
   }
 
-  List<CardItem> _selectedCards(List<CardItem> listOfCards) {
-    return listOfCards.where((element) => element.isTaped == true).toList();
+  void _updateStateCard(
+    Emitter<CompareImageState> emit,
+    List<CardItem> listOfCards,
+    CardItem card,
+  ) {
+    final list = List<CardItem>.from(listOfCards);
+    final listWithNewCard =
+        list.map((c) => c.id == card.id ? card : c).toList();
+    emit(state.copyWith(listOfCards: listWithNewCard));
+  }
+
+  bool _isRequiredNumberOfPicturesSelected(List<CardItem> listOfCards) =>
+      listOfCards.length == CompareImageState.numberOfComparedPictures;
+
+  List<CardItem> _selectedCards(List<CardItem> listOfCards) =>
+      listOfCards.where((element) => element.isTaped == true).toList();
+
+  int? _indexCardInList(List<CardItem> listOfCards, CardItem card) {
+    final index = listOfCards.indexWhere((element) => element.id == card.id);
+
+    return index != -1 ? index : null;
   }
 }

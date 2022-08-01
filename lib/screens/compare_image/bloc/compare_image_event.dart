@@ -9,15 +9,24 @@ abstract class CompareImageEvent {
 
 /// Photo click events.
 class CompareCardTappedEvent extends CompareImageEvent {
-  /// Index of cards.
-  final int indexOfCards;
+  /// Clicked card.
+  final CardItem cardItem;
 
   /// Constructor for CompareImageTappedEvent.
-  const CompareCardTappedEvent(this.indexOfCards);
+  const CompareCardTappedEvent(this.cardItem);
 }
 
 /// Button click events.
 class CompareCardComparedEvent extends CompareImageEvent {
   /// Constructor for CompareCardComparedEvent.
   const CompareCardComparedEvent();
+}
+
+/// Event to reset the card state
+class CompareCardResetCardToInitialStateEvent extends CompareImageEvent {
+  /// Card in which you need to reset the state.
+  final CardItem cardItem;
+
+  /// Constructor  accepts a card [cardItem]
+  const CompareCardResetCardToInitialStateEvent(this.cardItem);
 }

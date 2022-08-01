@@ -51,7 +51,10 @@ class _CompareImagePageState extends State<CompareImagePage> {
               mainAxisSpacing: CompareImagePage.mainAxisSpacing,
               children: List.generate(
                 listOfCards.length,
-                (index) => CardSelectable(indexCard: index),
+                (index) => CardSelectable(
+                  card: listOfCards[index],
+                  key: Key('cardselectable_$index'),
+                ),
               ),
             ),
             Positioned(
